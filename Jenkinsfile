@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM 'H/2 * * * *'
-    }
+    properties([pipelineTriggers([cron('2 * * *')])])
     stages {
         stage('Init') {
             steps {
