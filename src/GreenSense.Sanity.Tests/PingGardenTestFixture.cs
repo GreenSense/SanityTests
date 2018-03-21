@@ -11,7 +11,11 @@ namespace GreenSense.Sanity.Tests
         [Test]
         public void Test_PingGarden()
         {
-			PingHost ("greensense.hopto.org");
+			var host = Environment.GetEnvironmentVariable ("GARDEN_HOST");
+
+			Assert.IsNotNullOrEmpty (host, "GARDEN_HOST environment variable is not set.");
+
+			PingHost (host);
         }
 
 		public static bool PingHost(string nameOrAddress)
