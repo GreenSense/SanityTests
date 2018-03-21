@@ -14,3 +14,4 @@ mono nuget.exe update -self
 
 mono nuget.exe install nunit -version 2.6.4
 mono nuget.exe install nunit.runners -version 2.6.4
+mono nuget.exe install M2Mqtt
