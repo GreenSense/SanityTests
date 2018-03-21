@@ -14,6 +14,8 @@ namespace GreenSense.Sanity.Tests
 	{
 		public bool MessageReceived = false;
 
+		public string Topic = "/Irrigator1/C";
+
 		[Test]
 		public void Test_MqttServer()
 		{
@@ -39,9 +41,8 @@ namespace GreenSense.Sanity.Tests
 			mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			mqttClient.Connect (clientId, user, pass);
 
-			var topic = "/Irrigator1/C";
 
-			mqttClient.Subscribe(new string[] {topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+			mqttClient.Subscribe(new string[] {Topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
 			//mqttClient.Publish (suTopic, Encoding.UTF8.GetBytes ("TestValue"));
 
@@ -55,13 +56,15 @@ namespace GreenSense.Sanity.Tests
 		{
 			var topic = e.Topic;
 
-			var message = System.Text.Encoding.Default.GetString(e.Message);
+			if (Topic == topic) {
+				var message = System.Text.Encoding.Default.GetString (e.Message);
 
-			Console.WriteLine("Message received: " + message);
+				Console.WriteLine ("Message received: " + message);
 
-			//Assert.AreEqual ("TestValue", message);
+				//Assert.AreEqual ("TestValue", message);
 
-			MessageReceived = true;
+				MessageReceived = true;
+			}	
 		}
 
 	}
