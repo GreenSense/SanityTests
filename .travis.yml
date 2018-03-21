@@ -1,0 +1,11 @@
+sudo: required
+
+language: c#
+
+install:
+  - sh prepare.sh
+  - sh init.sh
+
+script:
+  - sh build.sh
+  - sh test.sh
