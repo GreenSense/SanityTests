@@ -10,7 +10,7 @@ using System.Threading;
 namespace GreenSense.Sanity.Tests
 {
 	[TestFixture]
-	public class GardenMqttTestFixture : BaseTestFixture
+	public class MonitorMqttTestFixture : BaseTestFixture
 	{
 		public bool MessageReceived = false;
 
@@ -18,7 +18,7 @@ namespace GreenSense.Sanity.Tests
 		public void Test_MqttServer()
 		{
 			Console.WriteLine ("==========");
-			Console.WriteLine ("Testing MQTT server is working for live GreenSense projects");
+			Console.WriteLine ("Testing MQTT data for live GreenSense monitor project");
 			Console.WriteLine ("==========");
 
 			var host = Environment.GetEnvironmentVariable ("MOSQUITTO_HOST");
@@ -39,15 +39,16 @@ namespace GreenSense.Sanity.Tests
 			mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			mqttClient.Connect (clientId, user, pass);
 
-			var subscribeTopic = "/SanityTest/Key";
-			mqttClient.Subscribe(new string[] {subscribeTopic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+			var topic = "/Monitor1/C";
 
-			mqttClient.Publish (subscribeTopic, Encoding.UTF8.GetBytes ("TestValue"));
+			mqttClient.Subscribe(new string[] {topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-			Thread.Sleep (1000);
+			//mqttClient.Publish (suTopic, Encoding.UTF8.GetBytes ("TestValue"));
+
+			Thread.Sleep (10000);
 
 
-			Assert.IsTrue (MessageReceived);
+			Assert.IsTrue (MessageReceived, "No MQTT data was received.");
 		}
 
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
@@ -58,7 +59,7 @@ namespace GreenSense.Sanity.Tests
 
 			Console.WriteLine("Message received: " + message);
 
-			Assert.AreEqual ("TestValue", message);
+			//Assert.AreEqual ("TestValue", message);
 
 			MessageReceived = true;
 		}

@@ -44,6 +44,8 @@
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="PingGardenTestFixture.cs" />
     <Compile Include="GardenMqttTestFixture.cs" />
+    <Compile Include="MonitorMqttTestFixture.cs" />
+    <Compile Include="IrrigatorMqttTestFixture.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
