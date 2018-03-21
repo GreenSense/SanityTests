@@ -10,8 +10,13 @@ namespace GreenSense.Sanity.Tests
     {
         [Test]
         public void Test_PingGarden()
-        {
+		{
 			var host = Environment.GetEnvironmentVariable ("GARDEN_HOST");
+			
+			Console.WriteLine ("==========");
+			Console.WriteLine ("Checking that garden host is active");
+			Console.WriteLine ("==========");
+			Console.WriteLine ("Host: " + host);
 
 			Assert.IsNotNullOrEmpty (host, "GARDEN_HOST environment variable is not set.");
 

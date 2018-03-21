@@ -17,28 +17,27 @@ namespace GreenSense.Sanity.Tests
 
         [SetUp]
         public void SetUp()
-        {
+		{
+			Console.WriteLine ("");
+
             OriginalDirectory = Environment.CurrentDirectory;
 
             TemporaryDirectory = new TemporaryDirectoryCreator ().Create ();
 
             Directory.SetCurrentDirectory (TemporaryDirectory);
-
-            Console.WriteLine ("Current directory:");
-            Console.WriteLine (TemporaryDirectory);
-            Console.WriteLine ();
         }
 
         [TearDown]
         public void TearDown()
         {
-            Console.WriteLine ("Cleaning up...");
-
             Directory.SetCurrentDirectory (OriginalDirectory);
 
             if (DeleteTemporaryDirectory && TemporaryDirectory.ToLower().Contains("-tmp")) {
                 Directory.Delete (TemporaryDirectory, true);
             }
+
+			Console.WriteLine ("");
+			Console.WriteLine ("");
         }
     }
 }
