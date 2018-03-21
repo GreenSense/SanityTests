@@ -11,9 +11,11 @@ namespace GreenSense.Sanity.Tests
 		[Test]
 		public void Test_PingGarden()
 		{
-			var token = Environment.GetEnvironmentVariable ("TESTTOKEN");
+			var user = Environment.GetEnvironmentVariable ("MOSQUITO_USERNAME");
+			var pass = Environment.GetEnvironmentVariable ("MOSQUITO_PASSWORD");
 
-			Console.WriteLine (token);
+			Console.WriteLine ("Username: " + user);
+			Console.WriteLine ("Password: " + pass);
 		}
 
 	}
