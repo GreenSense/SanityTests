@@ -41,12 +41,11 @@ namespace GreenSense.Sanity.Tests
 			mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			mqttClient.Connect (clientId, user, pass);
 
-
 			mqttClient.Subscribe(new string[] {Topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
 			//mqttClient.Publish (suTopic, Encoding.UTF8.GetBytes ("TestValue"));
 
-			Thread.Sleep (10000);
+			Thread.Sleep (20000);
 
 
 			Assert.IsTrue (MessageReceived, "No MQTT data was received.");
