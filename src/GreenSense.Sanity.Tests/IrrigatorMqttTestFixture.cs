@@ -14,7 +14,7 @@ namespace GreenSense.Sanity.Tests
 	{
 		public bool MessageReceived = false;
 
-		public string Topic = "/Irrigator1/C";
+		public string Topic = "/irrigator1/C";
 
 		[Test]
 		public void Test_MqttServer()
