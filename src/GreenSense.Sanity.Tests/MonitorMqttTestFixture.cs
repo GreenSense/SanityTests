@@ -14,7 +14,7 @@ namespace GreenSense.Sanity.Tests
 	{
 		public bool MessageReceived = false;
 
-		public string Topic = "/Monitor1/C";
+		public string Topic = "/monitor1/C";
 
 		[Test]
 		public void Test_MqttServer()
@@ -43,9 +43,17 @@ namespace GreenSense.Sanity.Tests
 
 			mqttClient.Subscribe(new string[] {Topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-			Thread.Sleep (10000);
+			var readIntervalInTopic = "/monitor1/V/in";
+
+			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V1"));
+
+			Thread.Sleep (2000);
+
+			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V10"));
 
 			Assert.IsTrue (MessageReceived, "No MQTT data was received.");
+			
+			mqttClient.Disconnect();
 		}
 
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)

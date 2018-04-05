@@ -48,6 +48,8 @@ namespace GreenSense.Sanity.Tests
 
 
 			Assert.IsTrue (MessageReceived);
+			
+			mqttClient.Disconnect();
 		}
 
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
