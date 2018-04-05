@@ -41,13 +41,12 @@ namespace GreenSense.Sanity.Tests
 			mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			mqttClient.Connect (clientId, user, pass);
 
-
 			mqttClient.Subscribe(new string[] {Topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
 			var readIntervalInTopic = "/irrigator1/V/in";
 
 			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V1"));
-
+			
 			Thread.Sleep (2000);
 
 			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V10"));
