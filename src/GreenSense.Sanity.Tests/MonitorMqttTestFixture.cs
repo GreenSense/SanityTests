@@ -22,10 +22,7 @@ namespace GreenSense.Sanity.Tests
 			
 			helper.Start();
 
-			var maxInterval = 5;
-			
-			for (int i = 1; i <= maxInterval; i+=2)
-				helper.RunReadIntervalTest(i);
+			helper.RunReadIntervalTests(5, 2);
 
 			helper.End();
 		}

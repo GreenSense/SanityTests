@@ -49,7 +49,24 @@ namespace GreenSense.Sanity.Tests
 	    
 	    public void End()
 	    {
+			PublishSuccess();
+			
 			Client.Disconnect();
+	    }
+	    
+	    public void RunReadIntervalTests(int maxInterval, int step)
+	    {
+			try
+			{
+				for (int i = 1; i <= maxInterval; i+=step)
+					RunReadIntervalTest(i);
+			}
+			catch (Exception ex)
+			{
+				PublishError(ex.Message);
+				
+				throw ex;
+			}
 	    }
 	    
 		public void RunReadIntervalTest(int interval)
@@ -113,6 +130,31 @@ namespace GreenSense.Sanity.Tests
 			Console.WriteLine("Topic: " + inTopic);
 			Client.Publish (inTopic, Encoding.UTF8.GetBytes (value.ToString()));
 			Console.WriteLine("");
+		}
+		
+		public void PublishSuccess()
+		{
+			ClearErrorMessage();
+			PublishStatus(0);
+		}
+		
+		public void PublishError(string error)
+		{
+			var errorTopic = "/" + DeviceName + "/Error";
+			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error));
+			PublishStatus(1);
+		}
+		
+		public void ClearErrorMessage()
+		{
+			var errorTopic = "/" + DeviceName + "/Error";
+			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (""));
+		}
+		
+		public void PublishStatus(int status)
+		{
+			var statusTopic = "/" + DeviceName + "/Status";
+			Client.Publish (statusTopic, Encoding.UTF8.GetBytes (status.ToString()));
 		}
 		
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
