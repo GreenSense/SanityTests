@@ -50,7 +50,7 @@ namespace GreenSense.Sanity.Tests
 			Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			Client.Connect (clientId, user, pass);
 
-			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
+			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 			
 			WaitForAccess();
 			
@@ -61,7 +61,7 @@ namespace GreenSense.Sanity.Tests
 	    public void End()
 	    {
 			PublishSuccess();
-			
+			Thread.Sleep(2000);
 			Client.Disconnect();
 			
 	    	Console.WriteLine("");
@@ -77,8 +77,8 @@ namespace GreenSense.Sanity.Tests
 	    	
 	    	var maxWaitTime = new TimeSpan(
 	    		0,
-	    		10, // minutes
-	    		0);
+	    		0, // minutes
+	    		10);
 	    	var startWaitTime = DateTime.Now;
 	    	
 	    	while (!hasAccess)
@@ -86,7 +86,7 @@ namespace GreenSense.Sanity.Tests
 	    		WaitForData(1);
 	    		
 	    		var currentStatus = ExistingStatusMessage;
-	    		var testIsReady = (currentStatus == "Passed" || currentStatus == "Failed");
+	    		var testIsReady = (currentStatus != "Testing");
 	    		Console.WriteLine("Test is ready: " + testIsReady);
 	    		
 	    		var waitedLongEnough = DateTime.Now.Subtract(startWaitTime) > maxWaitTime;
@@ -161,7 +161,9 @@ namespace GreenSense.Sanity.Tests
 		{
 	    	Console.WriteLine("Publishing error: " + error);
 			var errorTopic = "/" + DeviceName + "/Error";
-			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error));
+			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
 			PublishStatus(1, "Failed");
 		}
 		
@@ -191,7 +193,9 @@ namespace GreenSense.Sanity.Tests
 		{
 	    	Console.WriteLine("Publishing status message: " + message);
 			var statusMessageTopic = "/" + DeviceName + "/StatusMessage";
-			Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message));
+			Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
 		}
 		
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
