@@ -12,10 +12,6 @@ namespace GreenSense.Sanity.Tests
 	[TestFixture]
 	public class IrrigatorMqttTestFixture : BaseTestFixture
 	{
-		public bool MessageReceived = false;
-
-		public string Topic = "/irrigator1/C";
-
 		[Test]
 		public void Test_Irrigator()
 		{
