@@ -26,6 +26,10 @@ namespace GreenSense.Sanity.Tests
 	    
 	    public void Start()
 	    {
+	    	Console.WriteLine("");
+	    	Console.WriteLine("Starting MQTT test");
+	    	Console.WriteLine("");
+	    	
 			var host = Environment.GetEnvironmentVariable ("MOSQUITTO_HOST");
 			var user = Environment.GetEnvironmentVariable ("MOSQUITTO_USERNAME");
 			var pass = Environment.GetEnvironmentVariable ("MOSQUITTO_PASSWORD");
@@ -46,7 +50,10 @@ namespace GreenSense.Sanity.Tests
 
 			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 			
+			WaitForAccess();
+			
 			PublishStatusMessage("Testing");
+			
 	    }
 	    
 	    public void End()
@@ -54,6 +61,45 @@ namespace GreenSense.Sanity.Tests
 			PublishSuccess();
 			
 			Client.Disconnect();
+			
+	    	Console.WriteLine("");
+	    	Console.WriteLine("End of MQTT test");
+	    	Console.WriteLine("");
+	    }
+	    
+	    public void WaitForAccess()
+	    {
+	    	Console.WriteLine("Waiting for access (ie. ensuring another test isn't already running)");
+	    	
+	    	var hasAccess = false;
+	    	
+	    	var maxWaitTime = new TimeSpan(
+	    		0,
+	    		10, // minutes
+	    		0);
+	    	var startWaitTime = DateTime.Now;
+	    	
+	    	while (!hasAccess)
+	    	{
+	    		WaitForData(1);
+	    		
+	    		var currentStatus = Data[0].ContainsKey("StatusMessage") ? Data[0]["StatusMessage"] : "";
+	    		var testInProgress = (currentStatus == "Testing");
+	    		Console.WriteLine("Test in progress: " + testInProgress);
+	    		
+	    		var waitedLongEnough = DateTime.Now.Subtract(startWaitTime) > maxWaitTime;
+	    		Console.WriteLine("Waited long enough: " + waitedLongEnough);
+	    		
+	    		if (!testInProgress || waitedLongEnough)
+	    		{
+	    			Console.WriteLine("Access gained");
+	    			hasAccess = true;
+	    			break;
+	    		}
+	    		
+	    		Console.Write(".");
+	    		Thread.Sleep(500);
+	    	}
 	    }
 	    
 		public void WaitForData(int numberOfEntries)
@@ -104,12 +150,14 @@ namespace GreenSense.Sanity.Tests
 		
 		public void PublishSuccess()
 		{
+	    	Console.WriteLine("Publishing success");
 			ClearErrorMessage();
 			PublishStatus(0, "Passed");
 		}
 		
 		public void PublishError(string error)
 		{
+	    	Console.WriteLine("Publishing error: " + error);
 			var errorTopic = "/" + DeviceName + "/Error";
 			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error));
 			PublishStatus(1, "Failed");
@@ -135,6 +183,7 @@ namespace GreenSense.Sanity.Tests
 		
 		public void PublishStatusMessage(string message)
 		{
+	    	Console.WriteLine("Publishing status message: " + message);
 			var statusMessageTopic = "/" + DeviceName + "/StatusMessage";
 			Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message));
 		}

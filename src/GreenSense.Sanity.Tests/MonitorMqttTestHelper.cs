@@ -12,13 +12,6 @@ namespace GreenSense.Sanity.Tests
 {
 	public class MonitorMqttTestHelper : BaseMqttTestHelper
 	{
-	    /*public string DeviceName;
-	    
-		public List<Dictionary<string, string>> Data = new List<Dictionary<string, string>>();
-		public Dictionary<string, string> DataEntry = new Dictionary<string, string>();
-		
-		public MqttClient Client;
-*/
 	    public MonitorMqttTestHelper(string deviceName) : base(deviceName)
 	    {
 	    }
