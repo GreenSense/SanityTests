@@ -36,14 +36,13 @@ namespace GreenSense.Sanity.Tests
 				for (int i = 1; i <= maxInterval; i+=step)
 				{
 					RunReadIntervalTest(i);
-					
-					Thread.Sleep(2000);
 				}
 				Console.WriteLine("");
 				Console.WriteLine("Restoring original reading interval: " + existingInterval);
 				
 				SendCommand("V", existingInterval);
-				Thread.Sleep(5000);
+				
+				Thread.Sleep(1000);
 			}
 			catch (Exception ex)
 			{
