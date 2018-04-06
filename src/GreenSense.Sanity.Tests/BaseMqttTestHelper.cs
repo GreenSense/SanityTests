@@ -39,7 +39,7 @@ namespace GreenSense.Sanity.Tests
 			
 			Client = new MqttClient(host);
 
-			var clientId = Guid.NewGuid ().ToString ();
+ 			var clientId = Guid.NewGuid ().ToString ();
 
 			Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			Client.Connect (clientId, user, pass);
@@ -150,13 +150,24 @@ namespace GreenSense.Sanity.Tests
 			DataEntry[key] = value;
 
 
-			if (key == "Time")
+			if (key == "Time" && !IsDuplicateEntry(DataEntry))
 			{
 				Data.Add(DataEntry);
 				PrintDataEntry(DataEntry);
 				DataEntry = new Dictionary<string, string>();
 			}
 		}
+		
+		public bool IsDuplicateEntry(Dictionary<string, string> dataEntry)
+	    {
+	        foreach (var entry in Data)
+	        {
+	            if (entry["Time"] == dataEntry["Time"])
+	                return true;
+	        }
+	        
+	        return false;
+	    }
 		
 		public void PrintDataEntry(Dictionary<string, string> dataEntry)
 		{

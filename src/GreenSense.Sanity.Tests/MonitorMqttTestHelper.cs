@@ -34,8 +34,11 @@ namespace GreenSense.Sanity.Tests
 				Console.WriteLine("Existing reading interval: " + existingInterval);
 				
 				for (int i = 1; i <= maxInterval; i+=step)
+				{
 					RunReadIntervalTest(i);
-				
+					
+					Thread.Sleep(2000);
+				}
 				Console.WriteLine("");
 				Console.WriteLine("Restoring original reading interval: " + existingInterval);
 				
@@ -61,7 +64,7 @@ namespace GreenSense.Sanity.Tests
 
 			SendCommand("V", interval);
 			
-			Thread.Sleep(3000);
+			Thread.Sleep(1000);
 
 			WaitForData(3);
 
