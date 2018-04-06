@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -48,6 +48,8 @@ namespace GreenSense.Sanity.Tests
 
 
 			Assert.IsTrue (MessageReceived);
+			
+			mqttClient.Disconnect();
 		}
 
 		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)

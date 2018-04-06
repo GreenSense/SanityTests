@@ -3,4 +3,4 @@ echo "Dir: $PWD"
 
 DIR=$PWD
 
-xbuild src/GreenSense.Sanity.Tests.sln /p:Configuration=Release
+msbuild src/GreenSense.Sanity.Tests.sln /p:Configuration=Release
