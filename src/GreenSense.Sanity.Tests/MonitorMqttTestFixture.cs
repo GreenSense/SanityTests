@@ -18,7 +18,7 @@ namespace GreenSense.Sanity.Tests
 		{
 			WriteTestHeading ("Testing MQTT data for live GreenSense monitor project");
 
-			var helper = new DeviceMqttTestHelper("monitor1");
+			var helper = new MonitorMqttTestHelper("monitor1");
 			
 			helper.Start();
 

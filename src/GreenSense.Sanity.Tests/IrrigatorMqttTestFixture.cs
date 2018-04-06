@@ -17,14 +17,13 @@ namespace GreenSense.Sanity.Tests
 		{
 			WriteTestHeading ("Testing MQTT data for live GreenSense irrigator project");
 
-			var helper = new DeviceMqttTestHelper("irrigator1");
+			var helper = new IrrigatorMqttTestHelper("irrigator1");
 			
 			helper.Start();
 
-			var maxInterval = 5;
+			helper.RunReadIntervalTests(5, 2);
 			
-			for (int i = 1; i <= maxInterval; i+=2)
-				helper.RunReadIntervalTest(i);
+			helper.RunPumpStatusTests();
 
 			helper.End();
 			
