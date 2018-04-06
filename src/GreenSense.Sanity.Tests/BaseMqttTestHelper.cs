@@ -48,7 +48,7 @@ namespace GreenSense.Sanity.Tests
 			Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
 			Client.Connect (clientId, user, pass);
 
-			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE });
 			
 			WaitForAccess();
 			
@@ -84,13 +84,13 @@ namespace GreenSense.Sanity.Tests
 	    		WaitForData(1);
 	    		
 	    		var currentStatus = Data[0].ContainsKey("StatusMessage") ? Data[0]["StatusMessage"] : "";
-	    		var testInProgress = (currentStatus == "Testing");
-	    		Console.WriteLine("Test in progress: " + testInProgress);
+	    		var testIsReady = (currentStatus == "Passed" || currentStatus == "Failed");
+	    		Console.WriteLine("Test is ready: " + testIsReady);
 	    		
 	    		var waitedLongEnough = DateTime.Now.Subtract(startWaitTime) > maxWaitTime;
 	    		Console.WriteLine("Waited long enough: " + waitedLongEnough);
 	    		
-	    		if (!testInProgress || waitedLongEnough)
+	    		if (testIsReady || waitedLongEnough)
 	    		{
 	    			Console.WriteLine("Access gained");
 	    			hasAccess = true;
@@ -178,7 +178,11 @@ namespace GreenSense.Sanity.Tests
 		public void PublishStatus(int status)
 		{
 			var statusTopic = "/" + DeviceName + "/Status";
-			Client.Publish (statusTopic, Encoding.UTF8.GetBytes (status.ToString()));
+			Client.Publish (
+				statusTopic,
+				Encoding.UTF8.GetBytes (status.ToString()),
+                MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE, // QoS level
+                true);
 		}
 		
 		public void PublishStatusMessage(string message)
