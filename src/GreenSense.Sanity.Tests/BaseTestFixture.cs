@@ -39,6 +39,13 @@ namespace GreenSense.Sanity.Tests
 			Console.WriteLine ("");
 			Console.WriteLine ("");
         }
+        
+        public void WriteTestHeading(string text)
+        {
+			Console.WriteLine ("==========");
+			Console.WriteLine (text);
+			Console.WriteLine ("==========");
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -17,58 +17,20 @@ namespace GreenSense.Sanity.Tests
 		public string Topic = "/irrigator1/C";
 
 		[Test]
-		public void Test_MqttServer()
+		public void Test_Irrigator()
 		{
-			Console.WriteLine ("==========");
-			Console.WriteLine ("Testing MQTT data for live GreenSense irrigator project");
-			Console.WriteLine ("==========");
+			WriteTestHeading ("Testing MQTT data for live GreenSense irrigator project");
 
-			var host = Environment.GetEnvironmentVariable ("MOSQUITTO_HOST");
-			var user = Environment.GetEnvironmentVariable ("MOSQUITTO_USERNAME");
-			var pass = Environment.GetEnvironmentVariable ("MOSQUITTO_PASSWORD");
-
-			Assert.IsNotNullOrEmpty (host, "MOSQUITTO_HOST environment variable is not set.");
-			Assert.IsNotNullOrEmpty (user, "MOSQUITTO_USERNAME environment variable is not set.");
-			Assert.IsNotNullOrEmpty (pass, "MOSQUITTO_PASSWORD environment variable is not set.");
-
-			Console.WriteLine ("Host: " + host);
-			Console.WriteLine ("Username: " + user);
-
-			var mqttClient = new MqttClient(host);
-
-			var clientId = Guid.NewGuid ().ToString ();
-
-			mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-			mqttClient.Connect (clientId, user, pass);
-
-			mqttClient.Subscribe(new string[] {Topic}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-
-			var readIntervalInTopic = "/irrigator1/V/in";
-
-			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V1"));
+			var helper = new DeviceMqttTestHelper("irrigator1");
 			
-			Thread.Sleep (2000);
+			helper.Start();
 
-			mqttClient.Publish (readIntervalInTopic, Encoding.UTF8.GetBytes ("V10"));
+			helper.RunReadIntervalTest(2, 5);
 			
-			Assert.IsTrue (MessageReceived, "No MQTT data was received.");
+			helper.RunReadIntervalTest(3, 7);
+
+			helper.End();
 			
-			mqttClient.Disconnect();
-		}
-
-		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
-		{
-			var topic = e.Topic;
-
-			if (Topic == topic) {
-				var message = System.Text.Encoding.Default.GetString (e.Message);
-
-				Console.WriteLine ("Message received: " + message);
-
-				//Assert.AreEqual ("TestValue", message);
-
-				MessageReceived = true;
-			}	
 		}
 
 	}

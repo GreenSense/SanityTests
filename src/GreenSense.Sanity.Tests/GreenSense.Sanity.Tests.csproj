@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E888859B-8A06-4BFA-8915-7F614C2A571C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>gitter.Tests</RootNamespace>
+    <RootNamespace>GreenSense.Sanity.Tests</RootNamespace>
     <AssemblyName>GreenSense.Sanity.Tests</AssemblyName>
     <UseMSBuildEngine>False</UseMSBuildEngine>
   </PropertyGroup>
@@ -44,6 +44,7 @@
     <Compile Include="GardenMqttTestFixture.cs" />
     <Compile Include="MonitorMqttTestFixture.cs" />
     <Compile Include="IrrigatorMqttTestFixture.cs" />
+    <Compile Include="DeviceMqttTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
