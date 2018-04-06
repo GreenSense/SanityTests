@@ -18,6 +18,8 @@ namespace GreenSense.Sanity.Tests
 		public Dictionary<string, string> DataEntry = new Dictionary<string, string>();
 		
 		public MqttClient Client;
+		
+		public string ExistingStatusMessage;
 
 	    public BaseMqttTestHelper(string deviceName)
 	    {
@@ -83,7 +85,7 @@ namespace GreenSense.Sanity.Tests
 	    	{
 	    		WaitForData(1);
 	    		
-	    		var currentStatus = Data[0].ContainsKey("StatusMessage") ? Data[0]["StatusMessage"] : "";
+	    		var currentStatus = ExistingStatusMessage;
 	    		var testIsReady = (currentStatus == "Passed" || currentStatus == "Failed");
 	    		Console.WriteLine("Test is ready: " + testIsReady);
 	    		
@@ -202,6 +204,8 @@ namespace GreenSense.Sanity.Tests
 
 			DataEntry[key] = value;
 
+			if (key == "StatusMessage")
+				ExistingStatusMessage = value;
 
 			if (key == "Time" && !IsDuplicateEntry(DataEntry))
 			{
