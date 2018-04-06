@@ -58,8 +58,20 @@ namespace GreenSense.Sanity.Tests
 	    {
 			try
 			{
+				WaitForData(1);
+				
+				var existingInterval = Data[Data.Count-1]["V"];
+				
+				Console.WriteLine("Existing reading interval: " + existingInterval);
+				
 				for (int i = 1; i <= maxInterval; i+=step)
 					RunReadIntervalTest(i);
+				
+				Console.WriteLine("");
+				Console.WriteLine("Restoring original reading interval: " + existingInterval);
+				
+				SendCommand("V", existingInterval);
+				Thread.Sleep(2000);
 			}
 			catch (Exception ex)
 			{
@@ -71,25 +83,23 @@ namespace GreenSense.Sanity.Tests
 	    
 		public void RunReadIntervalTest(int interval)
 		{
-			int sleepSeconds = interval
-				* 2 // 2 entries are needed to compare
-				+ 1; // 1 second margin of error
+			//int sleepSeconds = interval
+			//	* 2 // 2 entries are needed to compare
+			//	+ 1; // 1 second margin of error
 			
 			Console.WriteLine("");
 			Console.WriteLine("Running read interval test...");
 			Console.WriteLine("Interval: " + interval);
-			Console.WriteLine("Sleep secconds: " + sleepSeconds);
+
 			
 			Console.WriteLine("");
 			Console.WriteLine("Setting read interval to " + interval);
 
-			ResetData();
-			
 			SendCommand("V", interval);
+			
+			Thread.Sleep(2000);
 
-			Console.WriteLine("Sleeping for " + sleepSeconds + " seconds.");
-
-			Thread.Sleep (sleepSeconds * 1000);
+			WaitForData(2);
 
 			Console.WriteLine("");
 			Console.WriteLine("Checking entry times");
@@ -100,6 +110,17 @@ namespace GreenSense.Sanity.Tests
 			Console.WriteLine("Checking read interval value");
 			
 			Assert.AreEqual(interval.ToString(), Data[Data.Count-1]["V"], "Invalid read interval value");
+		}
+		
+		public void WaitForData(int numberOfEntries)
+		{
+			Console.WriteLine("Waiting for data...");
+			ResetData();
+			while (Data.Count < numberOfEntries)
+			{
+				Console.Write(".");
+				Thread.Sleep(500);
+			}
 		}
 		
 		public void CheckDataEntryTimes(int expectedInterval)
@@ -120,6 +141,11 @@ namespace GreenSense.Sanity.Tests
 		}
 		
 		public void SendCommand(string key, int value)
+		{
+			SendCommand(key, value.ToString());
+		}
+		
+		public void SendCommand(string key, string value)
 		{
 			Console.WriteLine("");
 			Console.WriteLine("Sending command...");

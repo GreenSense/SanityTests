@@ -14,7 +14,7 @@ namespace GreenSense.Sanity.Tests
 			var host = Environment.GetEnvironmentVariable ("GARDEN_HOST");
 			
 			Console.WriteLine ("==========");
-			Console.WriteLine ("Checking that garden host is active");
+			Console.WriteLine ("Checking that the garden host is active");
 			Console.WriteLine ("==========");
 			Console.WriteLine ("Host: " + host);
 
