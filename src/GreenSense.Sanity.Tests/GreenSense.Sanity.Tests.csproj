@@ -5,9 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E888859B-8A06-4BFA-8915-7F614C2A571C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>gitter.Tests</RootNamespace>
+    <RootNamespace>GreenSense.Sanity.Tests</RootNamespace>
     <AssemblyName>GreenSense.Sanity.Tests</AssemblyName>
-    <UseMSBuildEngine>False</UseMSBuildEngine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
