@@ -52,8 +52,12 @@ namespace GreenSense.Sanity.Tests
 			Client.Disconnect();
 	    }
 	    
-		public void RunReadIntervalTest(int interval, int sleepSeconds)
+		public void RunReadIntervalTest(int interval)
 		{
+			int sleepSeconds = interval
+				* 2 // 2 entries are needed to compare
+				+ 1; // 1 second margin of error
+			
 			Console.WriteLine("");
 			Console.WriteLine("Running read interval test...");
 			Console.WriteLine("Interval: " + interval);
@@ -71,17 +75,31 @@ namespace GreenSense.Sanity.Tests
 			Thread.Sleep (sleepSeconds * 1000);
 
 			Console.WriteLine("");
-			Console.WriteLine("Checking number of entries");
+			Console.WriteLine("Checking entry times");
 			
-			var expectedNumberOfEntries = sleepSeconds / interval;
-			Console.WriteLine("Expected: " + expectedNumberOfEntries);
-			
-			Assert.AreEqual(expectedNumberOfEntries, Data.Count, "Invalid number of entries found");
+			CheckDataEntryTimes(interval);
 			
 			Console.WriteLine("");
 			Console.WriteLine("Checking read interval value");
 			
 			Assert.AreEqual(interval.ToString(), Data[Data.Count-1]["V"], "Invalid read interval value");
+		}
+		
+		public void CheckDataEntryTimes(int expectedInterval)
+		{
+			Assert.IsTrue(Data.Count >= 2, "More data entries are needed");
+			
+			var secondLastTime = DateTime.Parse(Data[Data.Count-2]["Time"]);
+			var lastTime = DateTime.Parse(Data[Data.Count-1]["Time"]);
+			
+			Console.WriteLine(secondLastTime.ToString());
+			Console.WriteLine(lastTime.ToString());
+			
+			var timeSpan = lastTime.Subtract(secondLastTime);
+		
+			Console.WriteLine("Time difference (seconds): " + timeSpan.TotalSeconds);
+			
+			Assert.AreEqual(expectedInterval, timeSpan.TotalSeconds, "Invalid time difference");
 		}
 		
 		public void SendCommand(string key, int value)
