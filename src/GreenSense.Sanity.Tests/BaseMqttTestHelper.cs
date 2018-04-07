@@ -51,6 +51,7 @@ namespace GreenSense.Sanity.Tests
 			Client.Connect (clientId, user, pass);
 
 			Client.Subscribe(new string[] {"/" + DeviceName + "/#"}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+			Client.Subscribe(new string[] {"/push/" + DeviceName}, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 			
 			WaitForAccess();
 			
@@ -211,7 +212,7 @@ namespace GreenSense.Sanity.Tests
 			if (key == "StatusMessage")
 				ExistingStatusMessage = value;
 
-			if (key == "Time" && !IsDuplicateEntry(DataEntry))
+			if (topic == "/push/" + DeviceName && !IsDuplicateEntry(DataEntry))
 			{
 				Data.Add(DataEntry);
 				PrintDataEntry(DataEntry);
