@@ -78,8 +78,8 @@ namespace GreenSense.Sanity.Tests
 	    	
 	    	var maxWaitTime = new TimeSpan(
 	    		0,
-	    		0, // minutes
-	    		10);
+	    		5, // minutes
+	    		0);
 	    	var startWaitTime = DateTime.Now;
 	    	
 	    	while (!hasAccess)
