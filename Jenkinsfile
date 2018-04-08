@@ -17,6 +17,11 @@ pipeline {
                 sh 'sh test.sh'
             }
         }
+        stage('Graduate') {
+            steps {
+                sh 'sh graduate.sh'
+            }
+        }
     }
     post {
         always {
