@@ -156,6 +156,7 @@ namespace GreenSense.Sanity.Tests
 	    	Console.WriteLine("Publishing success");
 			ClearErrorMessage();
 			PublishStatus(0, "Passed");
+			SendPushNotification();
 		}
 		
 		public void PublishError(string error)
@@ -166,12 +167,15 @@ namespace GreenSense.Sanity.Tests
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
                 true);
 			PublishStatus(1, "Failed");
+			SendPushNotification();
 		}
 		
 		public void ClearErrorMessage()
 		{
 			var errorTopic = "/" + DeviceName + "/Error";
-			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (""));
+			Client.Publish (errorTopic, Encoding.UTF8.GetBytes (""),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
 		}
 		
 		public void PublishStatus(int status, string message)
@@ -195,6 +199,15 @@ namespace GreenSense.Sanity.Tests
 	    	Console.WriteLine("Publishing status message: " + message);
 			var statusMessageTopic = "/" + DeviceName + "/StatusMessage";
 			Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
+		}
+		
+		public void SendPushNotification()
+		{
+			Console.WriteLine("Sending push notification");
+			var topic = "/push/" + DeviceName;
+			Client.Publish (topic, Encoding.UTF8.GetBytes ("Update"),
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
                 true);
 		}
