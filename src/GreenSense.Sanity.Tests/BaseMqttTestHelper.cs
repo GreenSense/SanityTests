@@ -206,7 +206,7 @@ namespace GreenSense.Sanity.Tests
 		public void SendPushNotification()
 		{
 			Console.WriteLine("Sending push notification");
-			var topic = "/push/" + DeviceName;
+			var topic = "/push/" + DeviceName + "/test";
 			Client.Publish (topic, Encoding.UTF8.GetBytes ("Update"),
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
                 true);
