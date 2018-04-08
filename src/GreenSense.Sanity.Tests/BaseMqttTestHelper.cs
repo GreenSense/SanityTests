@@ -56,7 +56,7 @@ namespace GreenSense.Sanity.Tests
 			WaitForAccess();
 			
 			PublishStatusMessage("Testing");
-			
+			SendPushNotification();
 	    }
 	    
 	    public void End()
