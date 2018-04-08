@@ -90,8 +90,14 @@ namespace GreenSense.Sanity.Tests
 	    		var testIsReady = (currentStatus != "Testing");
 	    		Console.WriteLine("Test is ready: " + testIsReady);
 	    		
-	    		var waitedLongEnough = DateTime.Now.Subtract(startWaitTime) > maxWaitTime;
-	    		Console.WriteLine("Waited long enough: " + waitedLongEnough);
+	    		var timeWaitedSoFar = DateTime.Now.Subtract(startWaitTime);
+	    		var waitedLongEnough = timeWaitedSoFar > maxWaitTime;
+	    		if (!testIsReady)
+	    		{
+		    		Console.WriteLine("Time waited so far: " + timeWaitedSoFar.ToString());
+		    		Console.WriteLine("Time needed to wait: " + maxWaitTime.ToString());
+		    		Console.WriteLine("Waited long enough: " + waitedLongEnough);
+	    		}
 	    		
 	    		if (testIsReady || waitedLongEnough)
 	    		{
