@@ -7,6 +7,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System.Net;
 
 namespace GreenSense.Sanity.Tests
 {
@@ -274,6 +275,19 @@ namespace GreenSense.Sanity.Tests
 		public void ResetData()
 		{
 			Data = new List<Dictionary<string, string>>();
+		}
+		
+		public string GetHttpContent(string uri)
+		{
+		    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+		    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+		
+		    using(HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+		    using(Stream stream = response.GetResponseStream())
+		    using(StreamReader reader = new StreamReader(stream))
+		    {
+		        return reader.ReadToEnd();
+		    }
 		}
 	}
 }

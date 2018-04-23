@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace GreenSense.Sanity.Tests
 {
-	public class MonitorMqttTestHelper : BaseMqttTestHelper
+	public class MonitorMqttTestHelper : MqttTestHelper
 	{
 	    public MonitorMqttTestHelper(string deviceName) : base(deviceName)
 	    {

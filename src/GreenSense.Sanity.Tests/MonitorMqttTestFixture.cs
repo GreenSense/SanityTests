@@ -23,6 +23,8 @@ namespace GreenSense.Sanity.Tests
 			helper.Start();
 
 			helper.RunReadIntervalTests(5, 2);
+			
+			helper.RunVersionTest("SoilMoistureSensorCalibratedSerial");
 
 			helper.End();
 		}

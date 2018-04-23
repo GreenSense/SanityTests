@@ -46,6 +46,7 @@
     <Compile Include="MonitorMqttTestHelper.cs" />
     <Compile Include="IrrigatorMqttTestHelper.cs" />
     <Compile Include="BaseMqttTestHelper.cs" />
+    <Compile Include="MqttTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
