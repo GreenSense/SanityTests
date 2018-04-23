@@ -24,6 +24,8 @@ namespace GreenSense.Sanity.Tests
 			helper.RunReadIntervalTests(5, 2);
 			
 			helper.RunPumpStatusTests();
+			
+			helper.RunVersionTest("SoilMoistureSensorCalibratedPump");
 
 			helper.End();
 			
