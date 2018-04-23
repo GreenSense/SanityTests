@@ -286,7 +286,7 @@ namespace GreenSense.Sanity.Tests
 		    using(Stream stream = response.GetResponseStream())
 		    using(StreamReader reader = new StreamReader(stream))
 		    {
-		        return reader.ReadToEnd();
+		        return reader.ReadToEnd().Trim();
 		    }
 		}
 	}
